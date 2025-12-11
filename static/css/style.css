@@ -12,27 +12,61 @@ body {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue",
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Helvetica Neue",
     "Segoe UI", Arial, sans-serif;
   background: #ffffff;
   color: #000000;
 }
 
+/* 가운데 정렬 컨테이너 */
 .page {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 32px 80px;
+  padding: 16px 32px 80px;
 }
 
-/* HERO 로고 */
+/* HERO 로고 영역: 좌우 여백 제거해서 꽉 차 보이게 */
+.hero {
+  margin: 0 -32px; /* page의 좌우 padding(-32px)만큼 빼서 화면 끝까지 */
+}
 
+/* 모바일에서는 padding이 줄어드니 margin도 맞춰서 줄이기 */
+@media (max-width: 900px) {
+  .page {
+    padding: 16px 16px 60px;
+  }
+
+  .hero {
+    margin: 0 -16px;
+  }
+}
+
+/* HERO 로고 텍스트 */
 .hero-wordmark {
-  font-size: clamp(6rem, 18vw, 14rem);
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  line-height: 0.8;
+  display: flex;
+  align-items: center; /* GO / : / OD를 세로 중앙 정렬 */
+  gap: 0.04em;         /* 글자 사이 간격은 살짝만 띄우기 */
+  margin: 0;
+}
+
+/* GO, OD 공통 스타일 */
+.hero-part {
+  font-size: clamp(10rem, 34vw, 22rem);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 0.7;
   text-transform: uppercase;
 }
+
+/* 콜론 전용 스타일 – 살짝 위로 올리기 */
+.hero-colon {
+  font-size: clamp(10rem, 34vw, 22rem);
+  font-weight: 600;
+  line-height: 0.7;
+  position: relative;
+  top: -0.1em;  /* 이 값으로 위아래 미세 조정 */
+}
+
 
 /* 소개 + View / Get Info */
 
@@ -228,10 +262,6 @@ body {
 /* 반응형 */
 
 @media (max-width: 900px) {
-  .page {
-    padding: 32px 16px 60px;
-  }
-
   .intro {
     flex-direction: column;
     align-items: flex-start;
