@@ -1,0 +1,249 @@
+/* 리셋 & 기본 */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue",
+    "Segoe UI", Arial, sans-serif;
+  background: #ffffff;
+  color: #000000;
+}
+
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 32px 80px;
+}
+
+/* HERO 로고 */
+
+.hero-wordmark {
+  font-size: clamp(6rem, 18vw, 14rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 0.8;
+  text-transform: uppercase;
+}
+
+/* 소개 + View / Get Info */
+
+.intro {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 18px;
+}
+
+.intro-text {
+  margin: 0;
+  max-width: 720px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.intro-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.icon-button {
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.intro-view-label {
+  font-size: 14px;
+}
+
+.link-button {
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px 0;
+  position: relative;
+}
+
+.link-button::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: #000000;
+}
+
+/* 구분선 */
+
+.divider {
+  border: none;
+  border-top: 1px solid #000000;
+  margin: 24px 0 32px;
+}
+
+/* 아이콘 그리드 */
+
+.icon-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 42px 56px;
+  align-items: flex-end;
+  padding-bottom: 48px;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 폴더 아이콘 */
+
+.folder-icon {
+  width: 180px;
+  height: 140px;
+  border-radius: 26px;
+  background: #ffe600;
+  position: relative;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+}
+
+/* 폴더 뚜껑 */
+.folder-icon::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -26px;
+  width: 60%;
+  height: 36px;
+  border-radius: 20px 20px 0 0;
+  background: #ffe600;
+}
+
+/* 상단 색 차이 */
+.folder-icon::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 40px;
+  border-radius: 26px 26px 0 0;
+  background: rgba(255, 243, 133, 0.8);
+}
+
+/* TXT 문서 아이콘 */
+
+.doc-icon {
+  width: 160px;
+  height: 140px;
+  border-radius: 22px;
+  background: #ffffff;
+  position: relative;
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.18);
+}
+
+/* 접힌 모서리 */
+.doc-icon::before {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 46px;
+  height: 46px;
+  background: #f1f1f1;
+  border-radius: 0 22px 0 0;
+}
+
+.doc-mark {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 20px;
+  letter-spacing: 0.16em;
+  color: #d0d0d0;
+}
+
+/* 아이템 캡션 */
+
+.item-caption {
+  margin-top: 14px;
+  font-size: 14px;
+}
+
+/* 푸터 */
+
+.footer {
+  margin-top: 32px;
+}
+
+.footer-row {
+  display: flex;
+  gap: 32px;
+  padding-top: 14px;
+  margin-top: 18px;
+  border-top: 1px solid #000000;
+}
+
+.footer-block {
+  flex: 1;
+}
+
+.footer-row--ack .footer-block {
+  flex: 1 1 100%;
+}
+
+.footer-label {
+  margin: 0 0 12px;
+  font-size: 13px;
+}
+
+.footer-value {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.full-width {
+  width: 100%;
+}
+
+/* 반응형 */
+
+@media (max-width: 900px) {
+  .page {
+    padding: 32px 16px 60px;
+  }
+
+  .intro {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .footer-row {
+    flex-direction: column;
+  }
+
+  .folder-icon,
+  .doc-icon {
+    width: 150px;
+    height: 120px;
+  }
+}
