@@ -1,60 +1,58 @@
 // static/js/main.js
 document.addEventListener("DOMContentLoaded", () => {
-  // View 토글 (Icons / List / Gallery)
-  const viewButtons = document.querySelectorAll(".view-button");
-  const previewList = document.getElementById("previewList");
+  // 첫 로딩 애니메이션
+  setTimeout(() => {
+    document.body.classList.add("is-loaded");
+  }, 100);
 
-  viewButtons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const view = btn.dataset.view; // icons / list / gallery
+  const viewToggle = document.getElementById("viewToggle");
+  const viewMenu = document.getElementById("viewMenu");
+  const viewOptions = document.querySelectorAll(".view-option");
+  const projectsGrid = document.getElementById("projectsGrid");
 
-      // 버튼 active 상태 변경
-      viewButtons.forEach((b) => b.classList.remove("is-active"));
-      btn.classList.add("is-active");
+  function setView(mode) {
+    if (!projectsGrid) return;
 
-      // 리스트 클래스 변경
-      if (!previewList) return;
-      previewList.classList.remove("view-icons", "view-list", "view-gallery");
-      previewList.classList.add(`view-${view}`);
+    if (mode === "list") {
+      projectsGrid.classList.add("is-list-view");
+    } else {
+      projectsGrid.classList.remove("is-list-view");
+    }
+  }
+
+  // 기본은 아이콘 뷰
+  setView("icons");
+
+  // VIEW 버튼 클릭 → 드롭다운 열기/닫기
+  if (viewToggle && viewMenu) {
+    viewToggle.addEventListener("click", (event) => {
+      event.stopPropagation();
+      viewMenu.classList.toggle("is-open");
     });
-  });
 
-  // Get Info 버튼: 왼쪽 패널 투명도 토글 (간단한 효과)
-  const infoToggle = document.getElementById("infoToggle");
-  const infoPanel = document.getElementById("infoPanel");
+    // as Icons / as List 선택
+    viewOptions.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const mode = btn.dataset.view || "icons";
+        setView(mode);
 
-  if (infoToggle && infoPanel) {
-    infoPanel.style.opacity = "1";
+        // 선택 표시 (✓) 업데이트
+        viewOptions.forEach((opt) => {
+          opt.classList.toggle("is-selected", opt === btn);
+        });
 
-    infoToggle.addEventListener("click", () => {
-      if (infoPanel.style.opacity === "1") {
-        infoPanel.style.opacity = "0.4";
-      } else {
-        infoPanel.style.opacity = "1";
+        viewMenu.classList.remove("is-open");
+      });
+    });
+
+    // 바깥 클릭 시 드롭다운 닫기
+    document.addEventListener("click", (event) => {
+      if (!viewMenu.contains(event.target) && event.target !== viewToggle) {
+        viewMenu.classList.remove("is-open");
       }
     });
   }
 
-  // 오른쪽 패널 탭 전환 (Cause / Chat / About Me / People)
-  const sideTabs = document.querySelectorAll(".side-tab");
-  const sideSections = document.querySelectorAll(".side-section");
-
-  sideTabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      const target = tab.dataset.panel; // cause / chat / company / people
-
-      // 탭 active 변경
-      sideTabs.forEach((t) => t.classList.remove("is-active"));
-      tab.classList.add("is-active");
-
-      // 섹션 표시 변경
-      sideSections.forEach((section) => {
-        if (section.dataset.panel === target) {
-          section.classList.add("is-active");
-        } else {
-          section.classList.remove("is-active");
-        }
-      });
-    });
-  });
+  // Get Info는 나중에 info 패널 만들면 여기서 연결하면 됨.
+  // const infoToggle = document.getElementById("infoToggle");
 });

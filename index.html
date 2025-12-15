@@ -2,138 +2,250 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>Portfolio — AI Character & Ad</title>
+  <title>ZI:MN — AI Image Production II</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- Pretendard 폰트 -->
+
+  <!-- Pretendard CDN -->
   <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
-  <!-- 사이트 스타일 -->
+
+  <!-- 메인 CSS -->
   <link rel="stylesheet" href="static/css/style.css" />
 </head>
 <body>
   <div class="page">
 
-    <!-- HERO 로고 영역 -->
+    <!-- HERO -->
     <header class="hero">
-  <div class="hero-wordmark">
-    <span class="hero-part">GO</span>
-    <span class="hero-colon">:</span>
-    <span class="hero-part">OD</span>
-  </div>
-</header>
+      <h1 class="hero-wordmark">
+        <span class="hero-part">ZI</span>
+        <span class="hero-colon">:</span>
+        <span class="hero-part">MN</span>
+      </h1>
 
+      <!-- 수업명 + VIEW / GET INFO -->
+      <section class="intro">
+        <p class="intro-text">
+          AI IMAGE PRODUCTION II
+        </p>
 
-    <!-- 소개 + View / Get Info -->
-    <section class="intro">
-      <p class="intro-text">
-        이 사이트는 가상의 캐릭터와 AI로 제작한 광고 작업을 모아 보여주는
-        포트폴리오입니다.
-      </p>
-      <div class="intro-controls">
-        <button class="icon-button" aria-label="View options">
-          &#9638;
-        </button>
-        <span class="intro-view-label">View</span>
-        <button class="link-button">Get Info</button>
+        <div class="intro-controls">
+          <!-- VIEW 드롭다운 -->
+          <div class="view-group">
+            <button class="view-trigger" id="viewToggle">VIEW</button>
+
+            <div class="view-menu" id="viewMenu">
+              <button class="view-option is-selected" data-view="icons">
+                as Icons
+              </button>
+              <button class="view-option" data-view="list">
+                as List
+              </button>
+            </div>
+          </div>
+
+          <!-- GET INFO (지금은 스타일만, 나중에 기능 연결 가능) -->
+          <button class="link-button" id="infoToggle">
+            Get Info
+          </button>
+        </div>
+      </section>
+    </header>
+
+    <!-- 밑줄 -->
+    <hr class="divider" />
+
+    <!-- 폴더 / TXT 아이콘들 -->
+    <section class="icon-grid" id="projectsGrid">
+      <!-- 1. Main Ad -->
+      <div class="item">
+        <div class="item-main">
+          <div class="folder-icon"></div>
+          <div class="item-text">
+            <div class="item-title">Main Ad</div>
+            <div class="item-meta">
+              <span class="item-year">2025</span>
+              <span class="item-sep">·</span>
+              <span class="item-detail">AI Ad, Character</span>
+            </div>
+          </div>
+        </div>
+        <button class="item-view-link">View</button>
+      </div>
+
+      <!-- 2. Character Sheet -->
+      <div class="item">
+        <div class="item-main">
+          <div class="folder-icon"></div>
+          <div class="item-text">
+            <div class="item-title">Character Sheet</div>
+            <div class="item-meta">
+              <span class="item-year">2025</span>
+              <span class="item-sep">·</span>
+              <span class="item-detail">Character Design</span>
+            </div>
+          </div>
+        </div>
+        <button class="item-view-link">View</button>
+      </div>
+
+      <!-- 3. Storyboard -->
+      <div class="item">
+        <div class="item-main">
+          <div class="folder-icon"></div>
+          <div class="item-text">
+            <div class="item-title">Storyboard</div>
+            <div class="item-meta">
+              <span class="item-year">2025</span>
+              <span class="item-sep">·</span>
+              <span class="item-detail">Story / Planning</span>
+            </div>
+          </div>
+        </div>
+        <button class="item-view-link">View</button>
+      </div>
+
+      <!-- 4. Style Frames -->
+      <div class="item">
+        <div class="item-main">
+          <div class="folder-icon"></div>
+          <div class="item-text">
+            <div class="item-title">Style Frames</div>
+            <div class="item-meta">
+              <span class="item-year">2024</span>
+              <span class="item-sep">·</span>
+              <span class="item-detail">Visual Exploration</span>
+            </div>
+          </div>
+        </div>
+        <button class="item-view-link">View</button>
+      </div>
+
+      <!-- 5. Motion Test -->
+      <div class="item">
+        <div class="item-main">
+          <div class="folder-icon"></div>
+          <div class="item-text">
+            <div class="item-title">Motion Test</div>
+            <div class="item-meta">
+              <span class="item-year">2024</span>
+              <span class="item-sep">·</span>
+              <span class="item-detail">Motion Experiment</span>
+            </div>
+          </div>
+        </div>
+        <button class="item-view-link">View</button>
+      </div>
+
+      <!-- 6. Archive -->
+      <div class="item">
+        <div class="item-main">
+          <div class="folder-icon"></div>
+          <div class="item-text">
+            <div class="item-title">Archive</div>
+            <div class="item-meta">
+              <span class="item-year">2023</span>
+              <span class="item-sep">·</span>
+              <span class="item-detail">Early Concepts</span>
+            </div>
+          </div>
+        </div>
+        <button class="item-view-link">View</button>
+      </div>
+
+      <!-- 7. Cause (TXT) -->
+      <div class="item">
+        <div class="item-main">
+          <div class="doc-icon">
+            <span class="doc-mark">TXT</span>
+          </div>
+          <div class="item-text">
+            <div class="item-title">Cause</div>
+            <div class="item-meta">
+              <span class="item-detail">Project Statement</span>
+            </div>
+          </div>
+        </div>
+        <button class="item-view-link">View</button>
+      </div>
+
+      <!-- 8. Chat (TXT) -->
+      <div class="item">
+        <div class="item-main">
+          <div class="doc-icon">
+            <span class="doc-mark">TXT</span>
+          </div>
+          <div class="item-text">
+            <div class="item-title">Chat</div>
+            <div class="item-meta">
+              <span class="item-detail">Conversation & Notes</span>
+            </div>
+          </div>
+        </div>
+        <button class="item-view-link">View</button>
+      </div>
+
+      <!-- 9. Company (TXT) -->
+      <div class="item">
+        <div class="item-main">
+          <div class="doc-icon">
+            <span class="doc-mark">TXT</span>
+          </div>
+          <div class="item-text">
+            <div class="item-title">Company</div>
+            <div class="item-meta">
+              <span class="item-detail">About the Project</span>
+            </div>
+          </div>
+        </div>
+        <button class="item-view-link">View</button>
+      </div>
+
+      <!-- 10. People (TXT) -->
+      <div class="item">
+        <div class="item-main">
+          <div class="doc-icon">
+            <span class="doc-mark">TXT</span>
+          </div>
+          <div class="item-text">
+            <div class="item-title">People</div>
+            <div class="item-meta">
+              <span class="item-detail">Credits & Thanks</span>
+            </div>
+          </div>
+        </div>
+        <button class="item-view-link">View</button>
       </div>
     </section>
 
-    <hr class="divider" />
-
-    <!-- 폴더 / TXT 아이콘 그리드 -->
-    <section class="icon-grid">
-
-      <!-- 노란 폴더들 -->
-      <article class="item">
-        <div class="folder-icon"></div>
-        <div class="item-caption">Main Ad</div>
-      </article>
-
-      <article class="item">
-        <div class="folder-icon"></div>
-        <div class="item-caption">Character Sheet</div>
-      </article>
-
-      <article class="item">
-        <div class="folder-icon"></div>
-        <div class="item-caption">Storyboard</div>
-      </article>
-
-      <article class="item">
-        <div class="folder-icon"></div>
-        <div class="item-caption">Style Frames</div>
-      </article>
-
-      <article class="item">
-        <div class="folder-icon"></div>
-        <div class="item-caption">Motion Test</div>
-      </article>
-
-      <article class="item">
-        <div class="folder-icon"></div>
-        <div class="item-caption">Archive</div>
-      </article>
-
-      <!-- TXT 문서 아이콘들 (Cause / Chat / Company / People) -->
-      <article class="item">
-        <div class="doc-icon">
-          <span class="doc-mark">TXT</span>
-        </div>
-        <div class="item-caption">Cause</div>
-      </article>
-
-      <article class="item">
-        <div class="doc-icon">
-          <span class="doc-mark">TXT</span>
-        </div>
-        <div class="item-caption">Chat</div>
-      </article>
-
-      <article class="item">
-        <div class="doc-icon">
-          <span class="doc-mark">TXT</span>
-        </div>
-        <div class="item-caption">Company</div>
-      </article>
-
-      <article class="item">
-        <div class="doc-icon">
-          <span class="doc-mark">TXT</span>
-        </div>
-        <div class="item-caption">People</div>
-      </article>
-    </section>
-
-    <!-- 하단 정보 영역 -->
+    <!-- 푸터 -->
     <footer class="footer">
       <div class="footer-row">
         <div class="footer-block">
-          <h4 class="footer-label">Instagram</h4>
+          <p class="footer-label">Instagram</p>
           <p class="footer-value">@your_instagram</p>
         </div>
-
         <div class="footer-block">
-          <h4 class="footer-label">Email</h4>
+          <p class="footer-label">Email</p>
           <p class="footer-value">you@example.com</p>
         </div>
-
         <div class="footer-block">
-          <h4 class="footer-label">Location</h4>
+          <p class="footer-label">Location</p>
           <p class="footer-value">Seoul, Republic of Korea</p>
         </div>
       </div>
 
       <div class="footer-row footer-row--ack">
-        <div class="footer-block full-width">
-          <h4 class="footer-label">Acknowledgement</h4>
-          <p class="footer-value">
-            이 포트폴리오는 대학교 수업 과제를 위해 제작되었으며,
-            AI와 캐릭터를 활용한 실험적인 광고 작업을 담고 있습니다.
+        <div class="footer-block">
+          <p class="footer-label">Acknowledgement</p>
+          <p class="footer-value full-width">
+            This portfolio was created as part of AI Image Production II.
+            It gathers an imaginary character and AI-generated advertisement
+            experiments into one place.
           </p>
         </div>
       </div>
     </footer>
-
   </div>
 
   <script src="static/js/main.js"></script>
