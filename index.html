@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -6,17 +5,47 @@
   <title>ZI:MN — AI Image Production II</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- Pretendard CDN -->
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
-
-  <!-- 메인 CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
   <link rel="stylesheet" href="static/css/style.css" />
+
+
+  <style>
+    /* 🚨 다크모드 리스트뷰 강제 적용 패치 (HTML 직접 주입) 🚨 */
+    
+    /* 1. 리스트 뷰일 때 모든 글자 강제 흰색 */
+    body.dark-mode #projectsGrid.is-list-view .item,
+    body.dark-mode #projectsGrid.is-list-view .item * {
+      color: #ffffff !important;
+      border-color: rgba(255, 255, 255, 0.2) !important;
+      transition: color 0.5s ease, border-color 0.5s ease;
+    }
+
+    /* 2. View 버튼 밑줄 강제 흰색 */
+    body.dark-mode #projectsGrid.is-list-view .item-view-link::after {
+      background: #ffffff !important;
+      transition: background 0.5s ease;
+    }
+
+    /* 3. 마우스 올렸을 때 배경색 */
+    body.dark-mode #projectsGrid.is-list-view .item:hover {
+      background-color: rgba(255, 255, 255, 0.05) !important;
+    }
+  </style>
+
 </head>
 <body>
-  <div class="page">
 
-    <!-- HERO -->
+  <div id="introOverlay" class="intro-overlay">
+    <video id="introVideo" muted playsinline>
+      <source src="teaser.mp4" type="video/mp4">
+    </video>
+    <button id="skipBtn">SKIP INTRO</button>
+  </div>
+
+  <div class="film-grain"></div>
+
+  <div class="page">
+    
     <header class="hero">
       <h1 class="hero-wordmark">
         <span class="hero-part">ZI</span>
@@ -24,28 +53,21 @@
         <span class="hero-part">MN</span>
       </h1>
 
-      <!-- 수업명 + VIEW / GET INFO -->
       <section class="intro">
         <p class="intro-text">
           AI IMAGE PRODUCTION II
         </p>
 
         <div class="intro-controls">
-          <!-- VIEW 드롭다운 -->
           <div class="view-group">
             <button class="view-trigger" id="viewToggle">VIEW</button>
 
             <div class="view-menu" id="viewMenu">
-              <button class="view-option is-selected" data-view="icons">
-                as Icons
-              </button>
-              <button class="view-option" data-view="list">
-                as List
-              </button>
+              <button class="view-option is-selected" data-view="icons">as Icons</button>
+              <button class="view-option" data-view="list">as List</button>
             </div>
           </div>
 
-          <!-- GET INFO (지금은 스타일만, 나중에 기능 연결 가능) -->
           <button class="link-button" id="infoToggle">
             Get Info
           </button>
@@ -53,202 +75,414 @@
       </section>
     </header>
 
-    <!-- 밑줄 -->
     <hr class="divider" />
 
-    <!-- 폴더 / TXT 아이콘들 -->
     <section class="icon-grid" id="projectsGrid">
-      <!-- 1. Main Ad -->
-      <div class="item">
+      
+      <div class="item project-trigger" 
+           data-title="Jimin Kim" 
+           data-image="my-photo.png" 
+           data-desc="해당 포트폴리오 웹사이트의 제작자이자 주인입니다.">
         <div class="item-main">
           <div class="folder-icon"></div>
           <div class="item-text">
-            <div class="item-title">Main Ad</div>
+            <div class="item-title">Jimin</div>
             <div class="item-meta">
-              <span class="item-year">2025</span>
-              <span class="item-sep">·</span>
-              <span class="item-detail">AI Ad, Character</span>
+              <span class="item-year">2025</span><span class="item-sep">·</span><span class="item-detail">Ai character</span>
             </div>
           </div>
         </div>
         <button class="item-view-link">View</button>
       </div>
 
-      <!-- 2. Character Sheet -->
-      <div class="item">
+      <div class="item project-trigger"
+           data-title="점술사 고양이 묘운"
+           data-image="myo1.png, myo2.png"
+           data-desc="• 핵심 컨셉
+
+운명을 엿보는 신비한 점술가. 인간의 말을 구사하며, 찾아오는 이들의 미래를 엿보는 힘을 지닌 신비로운 고양이 점술가. 일반적인 고양이의 형상을 하고 있으나, 그 눈동자에는 평범한 생물이 담을 수 없는 깊은 지혜와 통찰력이 깃들어 있다.
+
+• 성격
+
+퉁명스러움 속에 감춰진 따뜻함 (츤데레)
+
+• 표면적 성격
+
+몹시 퉁명스럽고 불친절하다. 방문객에게 상냥한 인사를 건네는 법이 없으며, 질문에는 직설적이고 때로는 까칠하게 답한다. 감정적인 위로보다는 사실을 꿰뚫어 보는 데 집중한다.
+
+• 내면적 성격
+
+겉모습과 달리, 그 본질은 타고난 통찰력과 따뜻한 속내에 있다. 그의 점괘가 신뢰할 수 있는 이유는, 그가 미래의 단편을 정확히 짚어내기 때문이다. 비록 표현은 서툴지만, 드물게 보이는 ‘마지못한 칭찬’이나 손님을 챙기는 모습에서 그의 까칠함 속에 숨겨진 다정함을 엿볼 수 있다.
+
+• 외형
+
+털: 달빛을 머금은 듯한 은빛이 감도는 흰색 털
+눈: 오드아이(Odd-eye) — 한쪽은 차가운 얼음색(Ice-Blue), 다른 한쪽은 따뜻한 호박색(Amber)
+의복: 검은 망토(후드 포함), 정체를 감추듯 항상 두르고 있음
+
+• 능력 및 도구
+
+크리스탈 구슬 & 타로 카드
+구슬을 앞발로 ‘톡’ 치는 버릇이 있으며, 구슬을 통해 미래의 ‘장면’이나 ‘흐름’을 엿본다.
+타로 카드는 그 장면의 구체적인 ‘의미’를 해석하거나 방문자에게 필요한 조언을 전달하는 데 활용한다.
+
+• 배경
+
+베일에 싸인 과거. 어디에서 왔는지, 어째서 인간의 말을 하고 미래를 보게 되었는지에 대해서는 절대 스스로 말하지 않는다. 그의 과거와 진짜 정체는 안개 속에 싸여 있으며, 오직 ‘묘운(猫運)’이라는 이름과 그의 신비로운 점괘만이 그를 증명할 뿐이다.">
         <div class="item-main">
           <div class="folder-icon"></div>
           <div class="item-text">
-            <div class="item-title">Character Sheet</div>
+            <div class="item-title">Character - 묘운</div>
             <div class="item-meta">
-              <span class="item-year">2025</span>
-              <span class="item-sep">·</span>
-              <span class="item-detail">Character Design</span>
+              <span class="item-year">2025</span><span class="item-sep">·</span><span class="item-detail">Ai character</span>
             </div>
           </div>
         </div>
         <button class="item-view-link">View</button>
       </div>
 
-      <!-- 3. Storyboard -->
-      <div class="item">
+      <div class="item project-trigger"
+           data-title="나무 공예가 목현"
+           data-image="mok_1.png, mok_2.png"
+           data-desc="• 핵심 컨셉
+
+가업의 영향으로 20세답지 않은 실력을 가진 목공 장인급 대학생.
+겉으로는 차갑고 무뚝뚝하지만, 목재를 다루는 순간만큼은 누구보다 뜨겁고 섬세해지는 타입. “관계”보다 “완성도”를 우선시한다.
+
+• 성격
+
+무뚝뚝함 속의 책임감과 장인정신. 사람에게는 서툴지만, 결과물과 약속에는 성실하다.
+
+• 표면적 성격
+
+감정 표현이 적고 무표정이 기본값
+말이 짧고 단정적이라 차갑게 느껴짐
+사소한 규칙도 어기지 않으려는 원칙주의자
+“대충”이라는 단어를 싫어함
+
+• 내면적 성격
+
+완성도를 위해 끝까지 붙드는 인내심/집중력
+자기 기준이 높아 스스로도 자주 만족 못함(자기검열 강함)
+사람을 싫어하는 게 아니라, 어떻게 맞장구 쳐야 하는지 몰라서 거리감이 생김
+마음이 열리면 말 대신 행동으로 챙김(도구를 조용히 건네거나 위험한 작업을 대신 맡아줌)
+
+• 말투
+
+존댓말 기반의 딱딱한 사무적 어조
+단답형, 결론부터 말함: “됐습니다.” “그건 아닙니다.” “이렇게 하면 됩니다.”
+감정 공감보다 사실/논리/절차 우선
+칭찬도 건조하게 함: “나쁘지 않습니다.” “수치가 괜찮습니다.”
+
+• 버릇
+
+작업 전 도구/재료를 간격까지 맞춰 정렬
+집중하면 미간을 살짝 찌푸림
+대화 중 눈을 오래 못 마주치고 사포/연필/줄자 등을 만지작거림
+작업할 때 이어폰 착용(외부 소리 차단)
+목재 결을 볼 때 손가락으로 표면을 천천히 쓸어 결 확인
+
+• 외형
+
+20세 한국인 남성 대학생
+날카로운 눈매 + 무표정
+3mm 짧은 머리(실용주의)
+체형: 마른 근육형(손/전완 근육 발달)
+
+• 의복/소품
+
+두꺼운 캔버스/가죽 에이프런
+튼튼한 면바지(작업용 포켓) + 작업화
+머리에 두건(밴드/두건)
+시그니처 소품: 줄자+연필(귀 뒤), 미니 자/각도자, 손가락 밴드 1개
+
+• 능력 및 도구
+
+재단–가공–결합–마감 전 공정 숙련
+치수/각도 오차 최소화하는 정밀함
+도구: 끌, 대패, 톱, 클램프, 조각칼, 샌더, 목공 연필/각도자
+목재를 보면 즉시 용도와 구조가 설계로 떠오름
+
+• 배경
+
+어릴 때부터 작업장과 함께 자라 놀 시간이 적었음
+실력은 인정받지만 또래 문화에 약해 대인관계가 어색
+대학에서도 가업 지원/작업으로 늘 바쁨
+목표: “내 이름으로 남는 작품”을 만들고 싶다">
         <div class="item-main">
           <div class="folder-icon"></div>
           <div class="item-text">
-            <div class="item-title">Storyboard</div>
+            <div class="item-title">Character - 목현</div>
             <div class="item-meta">
-              <span class="item-year">2025</span>
-              <span class="item-sep">·</span>
-              <span class="item-detail">Story / Planning</span>
+              <span class="item-year">2025</span><span class="item-sep">·</span><span class="item-detail">Ai character</span>
             </div>
           </div>
         </div>
         <button class="item-view-link">View</button>
       </div>
 
-      <!-- 4. Style Frames -->
-      <div class="item">
+      <div class="item project-trigger"
+           data-title="사회 초년생 유정"
+           data-image="yu1.png, yu2.png"
+           data-desc="• 핵심 컨셉
+
+20대 중반의 사회 초년생 여성. 특별한 능력이나 과장된 설정 없이, 밝은 분위기와 늘 짓는 미소로 주변을 편안하게 만드는 “일상 속 호감형” 캐릭터.
+
+• 성격
+
+긍정적이고 다정한 현실형 성격. 사람을 좋아하고 분위기를 잘 살리지만, 무리해서까지 나서기보단 자연스럽게 돕는 타입.
+
+• 표면적 성격
+
+항상 미소를 유지해서 친근하게 보임
+말투가 부드럽고 리액션이 좋은 편
+눈치가 빠르고 분위기 전환을 잘함(어색함을 풀어줌)
+부탁을 받으면 “일단 해보자”로 시작하는 편
+
+• 내면적 성격
+
+사회 초년생답게 실수/평가에 예민해 혼자 걱정할 때가 있음
+사람들에게 잘 보이고 싶어서 웃음을 ‘습관’처럼 쓰기도 함
+그래도 책임감이 강해, 결국 해내고 나서 조용히 안도함
+가까운 사람에게는 고민을 솔직히 털어놓음(신뢰 기반)
+
+• 성격 키워드
+
+#밝음 #친화력 #배려 #성실함 #초년생_긴장 #눈치빠름 #감정표현_부드러움 #책임감
+
+• 말투
+
+긍정형 종결이 많음: “괜찮아요!” “제가 해볼게요.” “좋아요, 확인해볼게요.”
+상대를 안심시키는 말: “천천히 해도 돼요.” “큰일 아니에요.”
+부탁할 땐 부담 안 주는 공손함: “혹시 가능하실까요?”
+당황하면 말이 빨라지고 웃음이 살짝 어색해짐
+
+• 버릇
+
+웃을 때 눈이 살짝 초승달처럼 접힘
+긴장하면 단발 끝을 손가락으로 만지작거림
+메모/체크리스트 습관(하나씩 지우며 안심)
+“네!”라고 답한 뒤 0.5초 후 “네!”를 한 번 더 하는 버릇
+
+• 외형
+
+20대 중반 한국인 여성, 단정하고 호감형 인상
+목까지 내려오는 단발, 자연스러운 C컬
+흰색 머리(화이트 헤어): 차가운 백색보단 크림/실버 기운의 부드러운 톤
+전체적으로 밝은 표정이 기본(입꼬리/눈매가 부드러움)
+
+• 의복/소품
+
+사회 초년생 오피스 캐주얼: 블라우스/니트 + 슬랙스/미디 스커트, 로퍼/플랫
+색감은 뉴트럴 톤(베이지/그레이/네이비) 위주
+소품: 작은 사원증/카드지갑, 심플한 손목시계, 텀블러
+
+• 능력 및 도구
+
+현실 능력치: 일정/정리/커뮤니케이션
+상대가 편해지는 말을 고르는 센스, 끝까지 마무리하는 성실함
+도구: 체크리스트 노트, 포스트잇, 캘린더 앱, 텀블러
+
+• 배경
+
+첫 직장 입사 후 얼마 안 된 사회 초년생
+“잘하고 싶다”는 마음이 커서 가끔 자기검열/걱정이 있음
+작은 성취에 크게 기뻐하고, 사람들과 함께 성장하는 환경을 선호
+목표: “불안해도 결국 해내는 사람”이 되는 것">
         <div class="item-main">
           <div class="folder-icon"></div>
           <div class="item-text">
-            <div class="item-title">Style Frames</div>
+            <div class="item-title">Character - 유정</div>
             <div class="item-meta">
-              <span class="item-year">2024</span>
-              <span class="item-sep">·</span>
-              <span class="item-detail">Visual Exploration</span>
+              <span class="item-year">2024</span><span class="item-sep">·</span><span class="item-detail">Ai character</span>
             </div>
           </div>
         </div>
         <button class="item-view-link">View</button>
       </div>
 
-      <!-- 5. Motion Test -->
-      <div class="item">
+      <div class="item project-trigger"
+           data-title="New Wave Coffee"
+           data-category="AI 생성 광고영상"
+           data-video="coffee2.mp4" 
+           data-image="cof.png"
+           data-desc="가상의 커피 브랜드인 '뉴웨이브 커피'의 광고 영상입니다.
+           Veo 3로 제작되었고 배경음악은 Suno, 편집은 AE로 진행되었습니다.">
         <div class="item-main">
           <div class="folder-icon"></div>
           <div class="item-text">
-            <div class="item-title">Motion Test</div>
+            <div class="item-title">Ai Ad - 뉴웨이브 커피</div>
             <div class="item-meta">
-              <span class="item-year">2024</span>
-              <span class="item-sep">·</span>
-              <span class="item-detail">Motion Experiment</span>
+              <span class="item-year">2024</span><span class="item-sep">·</span><span class="item-detail">Ai movie</span>
             </div>
           </div>
         </div>
         <button class="item-view-link">View</button>
       </div>
 
-      <!-- 6. Archive -->
-      <div class="item">
+      <div class="item project-trigger"
+           data-title="백귀야행 1분 티저"
+           data-category="AI 생성 영화 티저"
+           data-video="aimovie.mp4" 
+           data-image="mov.png"
+           data-desc="가상의 영화인 '백귀야행'의 1분 가량의 티저입니다.
+           Veo 3로 영상이 제작되었고 Sora로 음성, 배경음악은 Suno, 편집은 AE로 진행되었습니다.">
         <div class="item-main">
           <div class="folder-icon"></div>
           <div class="item-text">
-            <div class="item-title">Archive</div>
+            <div class="item-title">Ai Movie - 백귀야행</div>
             <div class="item-meta">
-              <span class="item-year">2023</span>
-              <span class="item-sep">·</span>
-              <span class="item-detail">Early Concepts</span>
+              <span class="item-year">2024</span><span class="item-sep">·</span><span class="item-detail">Ai movie</span>
             </div>
           </div>
         </div>
         <button class="item-view-link">View</button>
       </div>
 
-      <!-- 7. Cause (TXT) -->
-      <div class="item">
+      <a class="item" href="https://z1minn.github.io/port/" target="_blank">
         <div class="item-main">
-          <div class="doc-icon">
-            <span class="doc-mark">TXT</span>
-          </div>
+          <div class="doc-icon"><span class="doc-mark">TXT</span></div>
           <div class="item-text">
-            <div class="item-title">Cause</div>
-            <div class="item-meta">
-              <span class="item-detail">Project Statement</span>
-            </div>
+            <div class="item-title">Ai 포트폴리오 웹사이트</div>
+            <div class="item-meta"><span class="item-detail">Etc</span></div>
           </div>
         </div>
-        <button class="item-view-link">View</button>
-      </div>
+        <button class="item-view-link">Visit Site</button>
+      </a>
 
-      <!-- 8. Chat (TXT) -->
-      <div class="item">
+      <div class="item project-trigger"
+           data-title="Hello"
+           data-image="" 
+           data-desc="이제 더 넣을게 없네">
         <div class="item-main">
-          <div class="doc-icon">
-            <span class="doc-mark">TXT</span>
-          </div>
+          <div class="doc-icon"><span class="doc-mark">TXT</span></div>
           <div class="item-text">
             <div class="item-title">Chat</div>
-            <div class="item-meta">
-              <span class="item-detail">Conversation & Notes</span>
-            </div>
+            <div class="item-meta"><span class="item-detail">Etc</span></div>
           </div>
         </div>
         <button class="item-view-link">View</button>
       </div>
 
-      <!-- 9. Company (TXT) -->
-      <div class="item">
+      <div class="item project-trigger"
+           data-title="안녕"
+           data-image="" 
+           data-desc="하하 쓸게없지롱">
         <div class="item-main">
-          <div class="doc-icon">
-            <span class="doc-mark">TXT</span>
-          </div>
+          <div class="doc-icon"><span class="doc-mark">TXT</span></div>
           <div class="item-text">
-            <div class="item-title">Company</div>
-            <div class="item-meta">
-              <span class="item-detail">About the Project</span>
-            </div>
+            <div class="item-title">Memo</div>
+            <div class="item-meta"><span class="item-detail">Etc</span></div>
           </div>
         </div>
         <button class="item-view-link">View</button>
       </div>
 
-      <!-- 10. People (TXT) -->
-      <div class="item">
+      <div class="item project-trigger"
+           data-title="Credits"
+           data-image="" 
+           data-desc="Directed by ZI:MN">
         <div class="item-main">
-          <div class="doc-icon">
-            <span class="doc-mark">TXT</span>
-          </div>
+          <div class="doc-icon"><span class="doc-mark">TXT</span></div>
           <div class="item-text">
-            <div class="item-title">People</div>
-            <div class="item-meta">
-              <span class="item-detail">Credits & Thanks</span>
-            </div>
+            <div class="item-title">Credits</div>
+            <div class="item-meta"><span class="item-detail">Etc</span></div>
           </div>
         </div>
         <button class="item-view-link">View</button>
       </div>
     </section>
 
-    <!-- 푸터 -->
     <footer class="footer">
       <div class="footer-row">
         <div class="footer-block">
-          <p class="footer-label">Instagram</p>
-          <p class="footer-value">@your_instagram</p>
+          <p class="footer-label">Instagram</p><p class="footer-value">@z1mn_</p>
         </div>
         <div class="footer-block">
-          <p class="footer-label">Email</p>
-          <p class="footer-value">you@example.com</p>
+          <p class="footer-label">Email</p><p class="footer-value">benieze@naver.com</p>
         </div>
         <div class="footer-block">
-          <p class="footer-label">Location</p>
-          <p class="footer-value">Seoul, Republic of Korea</p>
+          <p class="footer-label">Location</p><p class="footer-value">Busan, Republic of Korea</p>
         </div>
       </div>
-
       <div class="footer-row footer-row--ack">
         <div class="footer-block">
           <p class="footer-label">Acknowledgement</p>
-          <p class="footer-value full-width">
-            This portfolio was created as part of AI Image Production II.
-            It gathers an imaginary character and AI-generated advertisement
-            experiments into one place.
-          </p>
+          <p class="footer-value full-width">이 포트폴리오 웹사이트는 AI를 통해 제작된 다양한 작품들로 구성되어있습니다.</p>
         </div>
       </div>
     </footer>
+  </div> <div class="modal-overlay" id="projectModal">
+    <div class="modal-container">
+      <button class="modal-close" id="modalClose">✕</button>
+      <div class="modal-content">
+        <div class="modal-media"><img src="" alt="Project Image" id="modalImage" /></div>
+        <div class="modal-text">
+          <h2 class="modal-title" id="modalTitle">Project Title</h2>
+          <div class="modal-desc-scroll" data-lenis-prevent>
+  <p class="modal-description" id="modalDesc"></p>
+</div>
+            <p class="modal-description" id="modalDesc"></p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
+  <aside class="info-panel" id="infoPanel">
+    <div class="info-inner">
+      <div class="info-header"><span class="info-label">PREVIEW MODE</span></div>
+      <div class="info-content">
+        <p class="info-placeholder" id="infoPlaceholder">Select a project<br>to preview content.</p>
+        <img src="" alt="Preview" class="info-img" id="infoPreviewImg" />
+        <h3 class="info-title-preview" id="infoPreviewTitle"></h3>
+      </div>
+    </div>
+  </aside>
+
+  <button id="themeToggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+    </svg>
+    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </button>
+
+  <div id="cursor" class="custom-cursor"></div>
+
+  <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
   <script src="static/js/main.js"></script>
+
+  <script>
+    (function() {
+      const cursor = document.getElementById('cursor');
+      if (!cursor) return;
+
+      // 1. 마우스가 움직일 때마다 좌표 강제 업데이트
+      window.addEventListener('mousemove', (e) => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+        cursor.style.display = 'block'; // 강제로 보이게 설정
+      });
+
+      // 2. 버튼 등에 올렸을 때 커지는 효과
+      document.addEventListener('mouseover', (e) => {
+        if (e.target.closest('a, button, .project-trigger, .view-option')) {
+          cursor.classList.add('is-hovering');
+        } else {
+          cursor.classList.remove('is-hovering');
+        }
+      });
+    })();
+  </script>
 </body>
 </html>

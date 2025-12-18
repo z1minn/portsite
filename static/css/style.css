@@ -1,272 +1,136 @@
-
-
 /* 리셋 & 기본 */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-html,
+*, *::before, *::after { box-sizing: border-box; }
+html { scrollbar-gutter: stable; }
+html, body { margin: 0; padding: 0; }
 body {
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Helvetica Neue",
-    "Segoe UI", Arial, sans-serif;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", Arial, sans-serif;
   background: radial-gradient(circle at top, #fafafa 0, #ffffff 45%, #f7f7f7 100%);
   color: #000000;
+  overflow-x: hidden;
 }
 
-/* 가운데 정렬 컨테이너 */
+/* ========================================= */
+/* 1. INTRO VIDEO (Z-Index: 30000)           */
+/* ========================================= */
+.intro-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background-color: #000000;
+  z-index: 30000; /* 최상단 */
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity 0.8s ease-out, visibility 0.8s ease-out;
+}
+.intro-overlay.is-hidden { opacity: 0; visibility: hidden; pointer-events: none; z-index: -1 !important; }
+
+.intro-overlay video { width: 100%; height: 100%; object-fit: cover; }
+#skipBtn {
+  position: absolute; bottom: 40px; right: 40px;
+  background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.3);
+  padding: 8px 16px; font-size: 11px; letter-spacing: 0.1em; cursor: pointer;
+  text-transform: uppercase; z-index: 30001; opacity: 0.5; transition: opacity 0.3s;
+}
+#skipBtn:hover { opacity: 1; background: rgba(255,255,255,0.1); }
+
+/* ========================================= */
+/* 2. FILM GRAIN (Z-Index: 1 - 맨 뒤)         */
+/* ========================================= */
+.film-grain {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none; 
+  z-index: 1; /* 가장 뒤쪽 */
+  opacity: 0.05; 
+  background: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noise"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noise)"/%3E%3C/svg%3E');
+}
+
+/* ========================================= */
+/* 3. MAIN PAGE (Z-Index: 10 - 그레인 위)     */
+/* ========================================= */
 .page {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 16px 32px 80px;
+  max-width: 1200px; margin: 0 auto;
+  padding: 0 32px 80px; /* 상단 여백 0 */
+  
+  /* ✨ 핵심: 페이지 전체를 노이즈 위로 올림 (클릭 문제 해결) */
+  position: relative;
+  z-index: 10; 
+  
+  transition: padding-left 0.6s cubic-bezier(0.16, 1, 0.3, 1), max-width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
+body.is-panel-open .page { padding-left: 432px; max-width: 100%; }
 
-/* HERO 영역: 좌우 여백 제거해서 꽉 차 보이게 */
-.hero {
-  margin: 0 -32px;
-}
-
-/* ---------------------- */
-/* HERO 로고 + 애니메이션 */
-/* ---------------------- */
+/* ========================================= */
+/* 4. HEADER & CONTROLS                     */
+/* ========================================= */
+.hero { margin: 4vh -32px 0; } /* 로고를 위로 바짝 당김 */
 
 .hero-wordmark {
-  display: flex;
-  align-items: center;
-  gap: 0.04em;
-  margin: 0;
-  margin-left: 20px;  
-
-  opacity: 1;
-  transform: none;
-  transition:
-    opacity 1.2s cubic-bezier(0.22, 0.61, 0.36, 1),
-    transform 1.2s cubic-bezier(0.22, 0.61, 0.36, 1);
+  display: flex; align-items: center; gap: 0.04em; margin: 0; margin-left: 20px;
+  opacity: 1; transform: none;
+  transition: opacity 1.2s cubic-bezier(0.22, 0.61, 0.36, 1), transform 1.2s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
-
-.hero-part {
-  font-size: clamp(10rem, 34vw, 22rem);
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  line-height: 0.7;
-  text-transform: uppercase;
-}
-
+.hero-part { font-size: clamp(10rem, 34vw, 22rem); font-weight: 600; letter-spacing: 0.04em; line-height: 0.7; text-transform: uppercase; }
 .hero-colon {
-  font-size: clamp(10rem, 34vw, 22rem);
-  font-weight: 600;
-  line-height: 0.7;
-  position: relative;
-  top: -0.1em;
-
-  animation-name: colon-blink;
-  animation-duration: 2.5s;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-  animation-delay: 1.4s;
+  font-size: clamp(10rem, 34vw, 22rem); font-weight: 600; line-height: 0.7; position: relative; top: -0.1em;
+  animation-name: colon-blink; animation-duration: 2.5s; animation-timing-function: ease-in-out; animation-iteration-count: infinite; animation-delay: 1.4s;
 }
-
-/* 로딩 전 로고 상태 */
-body:not(.is-loaded) .hero-wordmark {
-  opacity: 0;
-  transform: translateY(20px) scale(0.9);
-}
-
-/* ---------------------- */
-/* 소개 + VIEW / GET INFO */
-/* ---------------------- */
+body:not(.is-loaded) .hero-wordmark { opacity: 0; transform: translateY(20px) scale(0.9); }
 
 .intro {
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-start;  /* ← 양 끝 말고, 왼쪽부터 차례로 놓기 */
-  gap: 770px;                   /* ← AI PRODUCT랑 VIEW/INFO 사이 간격 (숫자는 네가 조절) */
-  margin-top: 24px;
-  margin-left: -32px;
-
-
-  transition:
-    opacity 0.9s ease-out 0.4s,
-    transform 0.9s ease-out 0.4s;
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-top: 24px; margin-left: -32px; padding-right: 32px;
+  transition: opacity 0.9s ease-out 0.4s, transform 0.9s ease-out 0.4s;
 }
+body:not(.is-loaded) .intro { opacity: 0; transform: translateY(10px); }
 
-body:not(.is-loaded) .intro {
-  opacity: 0;
-  transform: translateY(10px);
-}
+.intro-text { margin: 0; max-width: 720px; font-size: 14px; letter-spacing: 0.18em; text-transform: uppercase; line-height: 1.4; opacity: 0.8; margin-left: 70px; }
 
-.intro-text {
-  margin: 0;
-  max-width: 720px;
-  font-size: 14px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  line-height: 1.4;
-  opacity: 0.8;
-  margin-left: 70px;   /* 오른쪽으로 8px 밀림 */
-
-}
-
+/* 버튼 그룹 */
 .intro-controls {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  font-size: 12px;
+  display: flex; align-items: center; 
+  gap: 30px; /* ✨ 버튼 사이 간격 충분히 확보 (밑줄 겹침 방지) */
 }
 
-/* VIEW / GET INFO 라인 */
-.view-group {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.view-trigger {
-  border: none;
-  background: transparent;
-  padding: 4px 0;
-  cursor: pointer;
-  font-size: 12px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+/* VIEW 버튼 */
+.view-group { position: relative; display: flex; align-items: center; }
+.view-trigger { 
+  border: none; background: transparent; padding: 4px 0; 
+  font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; 
+  cursor: pointer; position: relative; 
 }
 
 /* GET INFO 버튼 */
-.link-button {
-  border: none;
-  background: transparent;
-  font-size: 12px;
-  cursor: pointer;
-  padding: 4px 0;
-  position: relative;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+.link-button { 
+  border: none; background: transparent; font-size: 12px; padding: 4px 0; 
+  letter-spacing: 0.16em; text-transform: uppercase; 
+  cursor: pointer; position: relative; 
+  width: auto; /* 너비가 꽉 차서 밑줄이 길어지는 현상 방지 */
 }
 
-.link-button::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 1px;
-  background: #000000;
-  transform-origin: left;
-  transform: scaleX(0);
-  transition: transform 0.25s ease-out;
+/* 밑줄 애니메이션 */
+.link-button::after { 
+  content: ""; position: absolute; left: 0; bottom: 0; width: 100%; height: 1px; 
+  background: #000000; transform-origin: left; transform: scaleX(0); transition: transform 0.25s ease-out; 
 }
+.link-button:hover::after { transform: scaleX(1); }
 
-.link-button:hover::after {
-  transform: scaleX(1);
-}
-
-/* View 드롭다운 */
+/* 드롭다운 메뉴 */
 .view-menu {
-  position: absolute;
-  right: 0;
-  top: 140%;
-  min-width: 140px;
-  padding: 6px 0;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
-  display: none;
-  z-index: 20;
+  position: absolute; right: 0; top: 140%; min-width: 140px; padding: 6px 0;
+  background: #ffffff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  display: none; z-index: 100;
 }
+.view-menu.is-open { display: block; }
 
-.view-menu.is-open {
-  display: block;
-}
+.view-option { width: 100%; border: none; background: transparent; padding: 6px 16px; font-size: 13px; text-align: left; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.view-option::before { content: ""; width: 14px; }
+.view-option.is-selected::before { content: "✓"; }
+.view-option:hover { background: rgba(0, 0, 0, 0.04); }
 
-.view-option {
-  width: 100%;
-  border: none;
-  background: transparent;
-  padding: 6px 16px;
-  font-size: 13px;
-  text-align: left;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-}
+/* ... (이하 아이콘 그리드, 푸터, 팝업 스타일은 기존과 동일) ... */
+.divider { border: none; border-top: 1px solid #000000; margin: 16px 0px 40px; transform-origin: left; transform: scaleX(1); opacity: 1; transition: transform 0.7s ease-out 0.6s, opacity 0.7s ease-out 0.6s; }
+body:not(.is-loaded) .divider { transform: scaleX(0); opacity: 0; }
 
-.view-option::before {
-  content: "";
-  width: 14px;
-}
-
-.view-option.is-selected::before {
-  content: "✓";
-}
-
-.view-option:hover {
-  background: rgba(0, 0, 0, 0.04);
-}
-
-/* ---------------------- */
-/* 구분선 (밑줄)           */
-/* ---------------------- */
-
-/* 데스크톱 기준: hero가 좌우 -32px 먹고 있으니까 divider도 맞춰서 -32px */
-.divider {
-  border: none;
-  border-top: 1px solid #000000;
-  margin: 16px 0px 40px;   /* ← 좌우를 -32px 로, hero랑 똑같이 */
-  
-
-  transform-origin: left;
-  transform: scaleX(1);
-  opacity: 1;
-  transition:
-    transform 0.7s ease-out 0.6s,
-    opacity 0.7s ease-out 0.6s;
-}
-
-
-body:not(.is-loaded) .divider {
-  transform: scaleX(0);
-  opacity: 0;
-}
-
-/* ---------------------- */
-/* 아이콘 그리드 (기본: Icons 뷰) */
-/* ---------------------- */
-
-.icon-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 42px 56px;
-  align-items: flex-start;
-  padding-bottom: 48px;
-  margin-top: 80px;
-}
-
-.item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  opacity: 1;
-  transform: translateY(0);
-  transition:
-    opacity 0.8s ease-out,
-    transform 0.8s ease-out;
-}
-
-/* 로딩 전: 아래에서 위로, 투명 → 불투명 */
-body:not(.is-loaded) .icon-grid .item {
-  opacity: 0;
-  transform: translateY(24px);
-}
-
-/* 순차 등장용 딜레이 */
+.icon-grid { display: flex; flex-wrap: wrap; gap: 42px 56px; align-items: flex-start; padding-bottom: 48px; margin-top: 80px; }
+.item { display: flex; flex-direction: column; align-items: center; opacity: 1; transform: translateY(0); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+body:not(.is-loaded) .icon-grid .item { opacity: 0; transform: translateY(24px); }
 .icon-grid .item:nth-child(1)  { transition-delay: 1.6s; }
 .icon-grid .item:nth-child(2)  { transition-delay: 1.65s; }
 .icon-grid .item:nth-child(3)  { transition-delay: 1.7s; }
@@ -278,422 +142,463 @@ body:not(.is-loaded) .icon-grid .item {
 .icon-grid .item:nth-child(9)  { transition-delay: 2.0s; }
 .icon-grid .item:nth-child(10) { transition-delay: 2.05s; }
 
-/* 폴더 아이콘 */
-.folder-icon {
-  width: 180px;
-  height: 140px;
-  border-radius: 26px;
-  background: #ffe600;
-  position: relative;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
-  transition:
-    transform 0.25s ease-out,
-    box-shadow 0.25s ease-out;
-}
+.folder-icon { width: 180px; height: 140px; border-radius: 26px; background: #ffe600; position: relative; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25); transition: transform 0.25s ease-out, box-shadow 0.25s ease-out; }
+.folder-icon::before { content: ""; position: absolute; left: 0; top: -16px; width: 60%; height: 36px; border-radius: 20px 20px 0 0; background: #ffe600; }
+.folder-icon::after { content: ""; position: absolute; left: 0; top: 0; width: 100%; height: 40px; border-radius: 26px 26px 0 0; background: rgba(255, 243, 133, 0.8); }
+.doc-icon { width: 160px; height: 140px; border-radius: 22px; background: #ffffff; position: relative; box-shadow: 0 18px 36px rgba(0, 0, 0, 0.18); transition: transform 0.25s ease-out, box-shadow 0.25s ease-out; }
+.doc-icon::before { content: ""; position: absolute; right: 0; top: 0; width: 46px; height: 46px; background: #f1f1f1; border-radius: 0 22px 0 0; }
+.doc-mark { display: none !important; }
 
-.folder-icon::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: -16px;
-  width: 60%;
-  height: 36px;
-  border-radius: 20px 20px 0 0;
-  background: #ffe600;
-}
+.item-main { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.item-text { text-align: center; }
+.item-title { font-size: 15px; }
+.item-meta { font-size: 13px; opacity: 0.75; margin-top: 4px; display: none; }
+.item-view-link { border: none; background: transparent; margin-top: 10px; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; display: none; }
+.item:hover .folder-icon { transform: translateY(-8px); box-shadow: 0 26px 50px rgba(0, 0, 0, 0.35); animation: float 2.2s ease-in-out infinite; }
+.item:hover .doc-icon { transform: translateY(-6px); box-shadow: 0 22px 44px rgba(0, 0, 0, 0.3); animation: float 2.2s ease-in-out infinite; }
+a { text-decoration: none; color: inherit; }
 
-.folder-icon::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 40px;
-  border-radius: 26px 26px 0 0;
-  background: rgba(255, 243, 133, 0.8);
-}
+.icon-grid.is-list-view { flex-direction: column; align-items: stretch; gap: 0; }
+.icon-grid.is-list-view .item { width: 100%; flex-direction: row; align-items: center; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid #e0e0e0; }
+.icon-grid.is-list-view .item:hover { background-color: rgba(0, 0, 0, 0.02); }
+.icon-grid.is-list-view .item-main { flex-direction: row; align-items: center; gap: 16px; }
+.icon-grid.is-list-view .item-text { text-align: left; }
+.icon-grid.is-list-view .folder-icon, .icon-grid.is-list-view .doc-icon { width: 48px; height: 38px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.18); animation: none; }
+.icon-grid.is-list-view .folder-icon { border-radius: 10px; }
+.icon-grid.is-list-view .folder-icon::before { border-radius: 8px 8px 0 0; top: -5px; height: 11px; }
+.icon-grid.is-list-view .folder-icon::after { border-radius: 10px 10px 0 0; height: 14px; }
+.icon-grid.is-list-view .doc-icon { border-radius: 8px; }
+.icon-grid.is-list-view .doc-icon::before { width: 16px; height: 16px; border-radius: 0 10px 0 0; }
+.icon-grid.is-list-view .item-meta, .icon-grid.is-list-view .item-view-link { display: block; }
+.icon-grid.is-list-view .item-view-link { position: relative; padding-bottom: 2px; font-size: 11px; letter-spacing: 0.18em; opacity: 0.65; text-align: right; transition: opacity 0.2s ease-out; }
+.icon-grid.is-list-view .item-view-link::after { content: ""; position: absolute; left: 0; bottom: 0; width: 0; height: 1px; background: #000000; transition: width 0.25s ease-out; }
+.icon-grid.is-list-view .item:hover .item-view-link { opacity: 1; }
+.icon-grid.is-list-view .item:hover .item-view-link::after { width: 100%; }
+.icon-grid.is-list-view .item:hover .folder-icon, .icon-grid.is-list-view .item:hover .doc-icon { transform: translateY(-4px); }
 
-/* TXT 문서 아이콘 */
-.doc-icon {
-  width: 160px;
-  height: 140px;
-  border-radius: 22px;
-  background: #ffffff;
-  position: relative;
-  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.18);
-  transition:
-    transform 0.25s ease-out,
-    box-shadow 0.25s ease-out;
-}
-
-.doc-icon::before {
-  content: "";
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 46px;
-  height: 46px;
-  background: #f1f1f1;
-  border-radius: 0 22px 0 0;
-}
-
-.doc-mark {
-  display: none;
-
-}
-
-/* 공용 텍스트 구조 */
-.item-main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-}
-
-.item-text {
-  text-align: center;
-}
-
-.item-title {
-  font-size: 15px;
-}
-
-/* 상세 정보는 기본(icon) 뷰에서는 숨김 */
-.item-meta {
-  font-size: 13px;
-  opacity: 0.75;
-  margin-top: 4px;
-  display: none;
-}
-
-.item-view-link {
-  border: none;
-  background: transparent;
-  margin-top: 10px;
-  font-size: 12px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  cursor: pointer;
-  display: none;
-}
-
-/* 아이콘 뷰 호버 – 둥실둥실 */
-.item:hover .folder-icon {
-  transform: translateY(-8px);
-  box-shadow: 0 26px 50px rgba(0, 0, 0, 0.35);
-  animation: float 2.2s ease-in-out infinite;
-}
-
-.item:hover .doc-icon {
-  transform: translateY(-6px);
-  box-shadow: 0 22px 44px rgba(0, 0, 0, 0.3);
-  animation: float 2.2s ease-in-out infinite;
-}
-
-/* ---------------------- */
-/* 리스트 뷰               */
-/* ---------------------- */
-
-.icon-grid.is-list-view {
-  flex-direction: column;
-  align-items: stretch;
-  gap: 0;
-}
-
-.icon-grid.is-list-view .item {
-  width: 100%;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 0;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-/* 리스트 뷰: 한 줄 hover 시 배경 살짝 */
-.icon-grid.is-list-view .item {
-  position: relative;
-  transition: background-color 0.18s ease-out;
-}
-
-.icon-grid.is-list-view .item:hover {
-  background-color: rgba(0, 0, 0, 0.02); /* 너무 진하면 숫자 줄여도 됨 */
-}
-
-
-/* 왼쪽: 아이콘 + 텍스트 */
-.icon-grid.is-list-view .item-main {
-  flex-direction: row;
-  align-items: center;
-  gap: 16px;
-}
-
-.icon-grid.is-list-view .item-text {
-  text-align: left;
-}
-
-/* 리스트 뷰 – 폴더 + TXT 아이콘 크기 통일 */
-/* 리스트 뷰 – 폴더 + TXT 아이콘 크기 + 각진 정도 */
-.icon-grid.is-list-view .folder-icon,
-.icon-grid.is-list-view .doc-icon {
-  width: 48px;
-  height: 38px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.18);
-  animation: none;
-}
-
-/* 폴더 아이콘 모서리 덜 둥글게 */
-.icon-grid.is-list-view .folder-icon {
-  border-radius: 10px;          /* 원래 26px → 훨씬 각짐 */
-}
-
-.icon-grid.is-list-view .folder-icon::before {
-  border-radius: 8px 8px 0 0;   /* 상단 뚜껑도 같이 줄이기 */
-}
-
-.icon-grid.is-list-view .folder-icon::after {
-  border-radius: 10px 10px 0 0;
-}
-
-/* TXT 아이콘도 조금 더 각지게 */
-.icon-grid.is-list-view .doc-icon {
-  border-radius: 8px;           /* 원래 22px 근처였던 값보다 훨씬 작게 */
-}
-
-.icon-grid.is-list-view .doc-icon::before {
-  /* 접힌 모서리 유지 + 조금 더 각지게 */
-  border-radius: 0 6px 0 0;
-}
-
-
-
-
-/* 리스트 뷰에서는 메타/뷰 버튼 보이게 */
-.icon-grid.is-list-view .item-meta,
-.icon-grid.is-list-view .item-view-link {
-  display: block;
-}
-
-/* 리스트 뷰에서 VIEW 스타일 */
-.icon-grid.is-list-view .item-view-link {
-  position: relative;
-  padding-bottom: 2px;
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  opacity: 0.65;
-  text-align: right;
-  transition: opacity 0.2s ease-out;
-}
-
-/* VIEW 밑줄 애니메이션 */
-.icon-grid.is-list-view .item-view-link::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 0;
-  height: 1px;
-  background: #000000;
-  transition: width 0.25s ease-out;
-}
-
-/* 행에 hover 시 VIEW 강조 */
-.icon-grid.is-list-view .item:hover .item-view-link {
-  opacity: 1;
-}
-
-.icon-grid.is-list-view .item:hover .item-view-link::after {
-  width: 100%;
-}
-
-
-/* 리스트 뷰에서 호버는 살짝만 */
-.icon-grid.is-list-view .item:hover .folder-icon,
-.icon-grid.is-list-view .item:hover .doc-icon {
-  transform: translateY(-4px);
-}
-
-
-
-/* 리스트 뷰용 TXT 아이콘 – 작은 접힌 모서리 */
-.icon-grid.is-list-view .doc-icon::before {
-  content: "";
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 16px;   /* 아이콘 크기(48x38)에 맞게 축소 */
-  height: 16px;
-  background: #f1f1f1;
-  border-radius: 0 10px 0 0;
-}
-
-
-
-/* ---------------------- */
-/* 푸터                    */
-/* ---------------------- */
-
-.footer {
-  margin-top: 32px;
-}
-
-.footer-row {
-  display: flex;
-  gap: 32px;
-  padding-top: 14px;
-  margin-top: 18px;
-  border-top: 1px solid #000000;
-}
-
-.footer-block {
-  flex: 1;
-  cursor: default;
-  transition:
-    transform 0.2s ease-out,
-    opacity 0.2s ease-out;
-}
-
-.footer-block:hover {
-  transform: translateY(-2px);
-  opacity: 0.9;
-}
-
-
-.footer-row--ack .footer-block {
-  flex: 1 1 100%;
-}
-
-.footer-label {
-  margin: 0 0 12px;
-  font-size: 13px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  position: relative;
-  display: inline-block;   /* ✅ 글자 길이만큼만 박스가 잡히게 */
-
-}
-
-/* 기본 상태: 폭 0인 밑줄 */
-.footer-label::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -4px;
-  width: 0;
-  height: 1px;
-  background: #000000;
-  transition: width 0.25s ease-out;
-}
-
-/* footer-block에 hover하면 라벨 밑줄이 꽉 차게 */
-.footer-block:hover .footer-label::after {
-  width: 100%;
-}
-
-
-
-.footer-value {
-  margin: 0;
-  font-size: 16px;
-  line-height: 1.5;
-}
-
-.full-width {
-  width: 100%;
-}
-
-/* ---------------------- */
-/* 반응형                  */
-/* ---------------------- */
+.footer { margin-top: 32px; }
+.footer-row { display: flex; gap: 32px; padding-top: 14px; margin-top: 18px; border-top: 1px solid #000000; }
+.footer-block { flex: 1; cursor: default; transition: transform 0.2s ease-out, opacity 0.2s ease-out; }
+.footer-block:hover { transform: translateY(-2px); opacity: 0.9; }
+.footer-row--ack .footer-block { flex: 1 1 100%; }
+.footer-label { margin: 0 0 12px; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; position: relative; display: inline-block; }
+.footer-label::after { content: ""; position: absolute; left: 0; bottom: -4px; width: 0; height: 1px; background: #000000; transition: width 0.25s ease-out; }
+.footer-block:hover .footer-label::after { width: 100%; }
+.footer-value { margin: 0; font-size: 16px; line-height: 1.5; }
+.full-width { width: 100%; }
 
 @media (max-width: 900px) {
-  .page {
-    padding: 16px 16px 60px;
+  .page { padding: 16px 16px 60px; }
+  body.is-panel-open .page { padding-left: 16px; }
+  .divider { margin: 16px 0px 40px; }
+  .hero { margin: 0 -16px; }
+  .intro { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .folder-icon, .doc-icon { width: 150px; height: 120px; }
+  .footer-row { flex-direction: column; gap: 18px; }
+}
+
+@keyframes colon-blink { 0%, 45%, 100% { opacity: 1; } 60%, 80% { opacity: 0; } }
+@keyframes float { 0%, 100% { transform: translateY(-8px); } 50% { transform: translateY(-14px); } }
+
+/* ========================================= */
+/* INFO PANEL (Z-Index: 25000)               */
+/* ========================================= */
+/* ========================================= */
+/* INFO PANEL (좌측 패널)                    */
+/* ========================================= */
+.info-panel {
+  position: fixed; top: 0; left: 0; width: 400px; height: 100%;
+  background: #111111; color: #ffffff; 
+  z-index: 25000;
+  
+  transform: translateX(-100%); 
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  
+  /* ✨ [수정 1] 평소엔 그림자 없음 (안 삐져나오게) */
+  box-shadow: none; 
+  
+  display: flex; flex-direction: column;
+}
+
+.info-panel.is-active { 
+  transform: translateX(0);
+  /* ✨ [수정 2] 열렸을 때만 그림자 생성 */
+  box-shadow: 10px 0 40px rgba(0,0,0,0.3); 
+}
+.info-panel.is-active { transform: translateX(0); }
+.info-inner { padding: 40px; height: 100%; display: flex; flex-direction: column; }
+.info-header { border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 20px; margin-bottom: 40px; }
+.info-label { font-size: 12px; letter-spacing: 0.2em; color: #ffe600; }
+.info-content { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; position: relative; }
+.info-placeholder { font-size: 14px; color: #666; line-height: 1.6; text-transform: uppercase; letter-spacing: 0.1em; transition: opacity 0.3s; }
+/* ========================================= */
+/* INFO PANEL 이미지 (렉 제거 최적화)          */
+/* ========================================= */
+.info-img {
+  max-width: 100%; 
+  max-height: 60%; 
+  object-fit: contain; 
+  display: none;
+  
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5); 
+  border-radius: 4px; 
+  margin-bottom: 30px;
+
+  /* ✨ [수정] 애니메이션 삭제 -> 부드러운 전환만 유지 */
+  /* animation: fadeInMove ... (삭제함) */
+  transition: opacity 0.3s ease; 
+  opacity: 1;
+}
+@keyframes fadeInMove { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.info-title-preview { font-size: 24px; font-weight: 700; margin: 0; display: none; border-top: 1px solid #333; padding-top: 20px; width: 100%; }
+@media (max-width: 768px) { .info-panel { display: none; } }
+
+/* ========================================= */
+/* MODAL (Z-Index: 26000)                    */
+/* ========================================= */
+.modal-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(0px); 
+  z-index: 26000;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.6s, backdrop-filter 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.modal-overlay.is-active { opacity: 1; visibility: visible; pointer-events: auto; backdrop-filter: blur(12px); }
+
+.modal-container {
+  background: #111111; width: 90%; max-width: 1000px; height: 80vh;
+  border-radius: 20px; box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+  overflow: hidden; position: relative;
+  transform: translateY(30px) scale(0.97); opacity: 0;
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.5s ease-out;
+}
+.modal-overlay.is-active .modal-container { transform: translateY(0) scale(1); opacity: 1; }
+
+.modal-container.is-video-mode { max-width: 1400px; height: 85vh; }
+.modal-container.is-video-mode .modal-media { flex: 2; background: #000; }
+.modal-container.is-video-mode .modal-text { flex: 0.8; padding: 50px 40px; justify-content: flex-start; }
+.modal-category { display: none; font-size: 13px; color: #ffe600; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px; }
+.modal-container.is-video-mode .modal-category { display: block; }
+.modal-container.is-video-mode .modal-title { font-size: 40px; line-height: 1.1; margin-bottom: 30px; border: none; }
+.modal-container.is-video-mode .modal-description { font-size: 15px; color: #aaaaaa; line-height: 1.6; border-left: 2px solid #333; padding-left: 16px; }
+.modal-video { width: 100%; height: 100%; object-fit: contain; outline: none; }
+@media (max-width: 900px) {
+  .modal-container.is-video-mode { height: 80vh; }
+  .modal-container.is-video-mode .modal-content { flex-direction: column; }
+  .modal-container.is-video-mode .modal-media { flex: 1; min-height: 300px; }
+}
+
+.modal-close {
+  position: absolute; top: 20px; right: 24px; background: transparent; border: none;
+  color: #ffffff; font-size: 24px; cursor: pointer; z-index: 10; opacity: 0.6; transition: opacity 0.2s;
+}
+.modal-close:hover { opacity: 1; }
+
+.modal-content { display: flex; height: 100%; }
+.modal-media { flex: 1.2; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+.modal-media img { width: 100%; height: 100%; object-fit: contain; opacity: 1; transform: scale(1); transition: opacity 0.35s ease, transform 0.35s ease; cursor: pointer; }
+.modal-media img.is-changing { opacity: 0; transform: scale(0.96); }
+
+.modal-text { flex: 0.8; padding: 60px 40px; color: #ffffff; display: flex; flex-direction: column; justify-content: center; }
+.modal-title { font-size: 32px; font-weight: 700; margin: 0 0 24px 0; letter-spacing: -0.02em; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 20px; }
+.modal-desc-scroll { overflow-y: auto; max-height: 100%; padding-right: 24px; }
+.modal-description { font-size: 16px; line-height: 1.7; color: #cccccc; white-space: pre-line; }
+
+.modal-desc-scroll::-webkit-scrollbar { width: 6px; }
+.modal-desc-scroll::-webkit-scrollbar-track { background: transparent; margin-bottom: 10px; }
+.modal-desc-scroll::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
+.modal-desc-scroll::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.4); }
+.modal-desc-scroll { 
+  overflow-y: auto; 
+  max-height: 100%; 
+  padding-right: 24px; 
+  
+  /* 👇 [추가] 이 한 줄을 꼭 넣어주세요 */
+  overscroll-behavior: contain;
+}
+
+@media (max-width: 768px) {
+  .modal-content { flex-direction: column; }
+  .modal-media { flex: 1; height: 40%; }
+  .modal-text { flex: 1.5; padding: 30px 24px; }
+  .modal-title { font-size: 24px; padding-bottom: 12px; }
+}
+/* ========================================= */
+/* DARK MODE TOGGLE BUTTON                   */
+/* ========================================= */
+.theme-toggle {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  z-index: 15000; /* 인트로보단 아래, 페이지보단 위 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  color: #000;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.theme-toggle svg {
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  transition: opacity 0.3s ease, transform 0.5s ease;
+}
+
+/* 기본 상태: 해 아이콘 숨김 */
+.icon-sun { opacity: 0; transform: rotate(-90deg); }
+.icon-moon { opacity: 1; transform: rotate(0); }
+
+/* ========================================= */
+/* DARK MODE STYLES (다크모드 활성화 시)       */
+/* ========================================= */
+body.dark-mode {
+  background: radial-gradient(circle at top, #1a1a1a 0, #111111 45%, #000000 100%);
+  color: #ffffff;
+}
+
+/* 버튼 아이콘 교체 (달 숨기고 해 보여줌) */
+body.dark-mode .icon-moon { opacity: 0; transform: rotate(90deg); }
+body.dark-mode .icon-sun { opacity: 1; transform: rotate(0); }
+
+/* 다크모드일 때 요소별 색상 변경 */
+body.dark-mode .theme-toggle { background: #333; border-color: #555; color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+body.dark-mode .divider { border-color: rgba(255,255,255,0.2); }
+body.dark-mode .link-button::after { background: #ffffff; }
+body.dark-mode .footer-row { border-color: rgba(255,255,255,0.2); }
+body.dark-mode .footer-label::after { background: #ffffff; }
+
+/* 리스트 뷰일 때 선 색상 */
+body.dark-mode .icon-grid.is-list-view .item { border-color: rgba(255,255,255,0.15); }
+body.dark-mode .icon-grid.is-list-view .item:hover { background-color: rgba(255,255,255,0.05); }
+body.dark-mode .icon-grid.is-list-view .item-view-link::after { background: #ffffff; }
+
+/* 아이콘 그림자 조정 (어두운 배경에 맞게) */
+body.dark-mode .folder-icon { box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+body.dark-mode .doc-icon { background: #222; box-shadow: 0 10px 30px rgba(0,0,0,0.5); color: #fff; }
+body.dark-mode .doc-icon::before { background: #333; }
+
+/* ========================================= */
+/* PREMIUM TRANSITION (고급스러운 전환 효과)   */
+/* ========================================= */
+
+/* 1. 색상이 변하는 모든 주요 요소들에 0.8초 동안 부드러운 움직임을 줍니다. */
+body,
+.theme-toggle,
+.divider,
+.footer-row,
+.footer-label::after,
+.link-button::after,
+.icon-grid.is-list-view .item,
+.icon-grid.is-list-view .item-view-link::after,
+.doc-icon,
+.doc-icon::before,
+.folder-icon,
+.folder-icon::after {
+  
+  /* background, color, border, shadow가 바뀔 때 0.8초 동안 변함 */
+  transition: 
+    background 0.8s cubic-bezier(0.2, 0.8, 0.2, 1),
+    color 0.8s cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 0.8s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.8s cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform 0.5s ease; /* 크기/위치 변화는 조금 더 빠르게 */
+}
+
+/* 2. 다크모드일 때 배경 그라데이션을 살짝 조정하여 전환을 더 자연스럽게 만듦 */
+body.dark-mode {
+  /* 그라데이션이 서서히 어두워지는 느낌을 줌 */
+  background: radial-gradient(circle at top, #2a2a2a 0, #111111 50%, #000000 100%);
+}
+/* ========================================= */
+/* 🚨 다크모드 버튼 & 메뉴 색상 패치 🚨        */
+/* ========================================= */
+
+/* 1. VIEW 버튼 & GET INFO 버튼 글자색 -> 흰색 */
+body.dark-mode .view-trigger,
+body.dark-mode .link-button {
+  color: #ffffff !important;
+}
+
+/* 2. GET INFO 밑줄 색 -> 흰색 */
+body.dark-mode .link-button::after {
+  background: #ffffff !important;
+}
+
+/* 3. VIEW 눌렀을 때 나오는 메뉴창도 어둡게 변경 */
+body.dark-mode .view-menu {
+  background: #222222; /* 어두운 회색 */
+  color: #ffffff;
+  border: 1px solid #444; /* 테두리 살짝 */
+}
+
+/* 4. 메뉴창 마우스 올렸을 때 호버 효과 */
+body.dark-mode .view-option:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* 5. 버튼들도 부드럽게 색이 변하도록 트랜지션 목록에 추가 */
+.view-trigger,
+.view-menu,
+.view-option {
+  transition: 
+    color 0.8s cubic-bezier(0.2, 0.8, 0.2, 1),
+    background 0.8s cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* ========================================= */
+/* DARK MODE TOGGLE BUTTON                   */
+/* ========================================= */
+.theme-toggle {
+  position: fixed; bottom: 32px; right: 32px; width: 50px; height: 50px;
+  border-radius: 50%; background: #ffffff; border: 1px solid #e0e0e0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); cursor: pointer; z-index: 15000;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.3s ease, background 0.3s ease; color: #000;
+}
+.theme-toggle:hover { transform: scale(1.1); }
+.theme-toggle svg { width: 24px; height: 24px; position: absolute; transition: opacity 0.3s ease, transform 0.5s ease; }
+
+.icon-sun { opacity: 0; transform: rotate(-90deg); }
+.icon-moon { opacity: 1; transform: rotate(0); }
+
+/* ========================================= */
+/* DARK MODE (GLOBAL)                        */
+/* ========================================= */
+body.dark-mode {
+  background: radial-gradient(circle at top, #222 0, #111 45%, #000 100%);
+  color: #ffffff; /* 기본 글자색 흰색 */
+}
+
+/* 아이콘 교체 */
+body.dark-mode .icon-moon { opacity: 0; transform: rotate(90deg); }
+body.dark-mode .icon-sun { opacity: 1; transform: rotate(0); }
+body.dark-mode .theme-toggle { background: #333; color: #fff; border-color: #555; }
+
+/* 라인 및 기타 요소 반전 */
+body.dark-mode .divider { border-color: rgba(255,255,255,0.2); }
+body.dark-mode .footer-row { border-color: rgba(255,255,255,0.2); }
+body.dark-mode .link-button { color: #fff; }
+body.dark-mode .link-button::after { background: #fff; }
+body.dark-mode .view-trigger { color: #fff; } /* VIEW 버튼 글씨만 흰색 */
+
+/* ========================================= */
+/* ✨ [핵심] 메뉴와 리스트는 '흰색 카드'로 유지 ✨ */
+/* ========================================= */
+
+/* 1. VIEW 메뉴창: 그냥 원래대로 흰색 유지 (건드리지 않음) */
+/* (아무 코드도 안 넣으면 기본 흰색 배경 + 검은 글씨로 나옵니다) */
+
+/* 2. 리스트 뷰 아이템: 다크모드일 때 '흰색 박스'로 만듦 */
+body.dark-mode .icon-grid.is-list-view .item {
+  background-color: #ffffff !important; /* 배경 흰색 */
+  border-radius: 8px;
+  margin-bottom: 8px;
+  padding-left: 16px; 
+  padding-right: 16px;
+  border: none !important;
+}
+
+/* 3. 리스트 안의 모든 글씨는 검은색으로 강제 고정 (배경이 흰색이니까) */
+body.dark-mode .icon-grid.is-list-view * {
+  color: #000000 !important;
+}
+
+/* 4. 리스트 안의 'View' 밑줄 검은색 */
+body.dark-mode .icon-grid.is-list-view .item-view-link::after {
+  background: #000000 !important;
+}
+
+/* ========================================= */
+/* 🎨 [최종] 버튼 애니메이션 & 메뉴바 디자인 */
+/* ========================================= */
+
+/* 1. Get Info(link-button)와 VIEW(view-trigger)에 부드러운 전환 효과 적용 */
+/* 이제 다크모드 켤 때 글자색이 0.8초 동안 스르륵 바뀝니다 */
+.view-trigger,
+.link-button {
+  transition: color 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+}
+
+/* 밑줄도 같이 부드럽게 변하도록 설정 */
+.link-button::after {
+  transition: background-color 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.25s ease-out !important;
+}
+
+/* ----------------------------------------- */
+
+/* 2. 다크모드일 때 VIEW 메뉴창은 '흰색'으로 강제 고정 */
+/* (배경이 어두워져도 메뉴창은 하얀 카드처럼 떠 있게 됩니다) */
+body.dark-mode .view-menu {
+  background-color: #ffffff !important; /* 배경 무조건 흰색 */
+  color: #000000 !important;            /* 글자 무조건 검정 */
+  border: 1px solid #e0e0e0 !important; /* 테두리 살짝 */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6) !important; /* 그림자는 더 진하게 */
+}
+
+/* 3. 메뉴 옵션에 마우스 올렸을 때 (연한 회색) */
+body.dark-mode .view-option:hover {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+/* 4. 메뉴 옵션 체크 표시(✓)도 검은색 유지 */
+body.dark-mode .view-option::before {
+  color: #000000 !important; 
+}
+/* ========================================= */
+/* 🖱️ CUSTOM CURSOR (적응형 마우스)           */
+/* ========================================= */
+
+/* 1. 기본 마우스 숨기기 */
+/* (모바일에서는 터치라 커서가 없으므로 PC에서만 적용) */
+@media (min-width: 1024px) {
+  body {
+    cursor: none; /* 기본 화살표 숨김 */
   }
-
-  .divider {
-    margin: 16px 0px 40px;
-  }
-
-  .hero {
-    margin: 0 -16px;
-  }
-
-  .intro {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
-
-  .folder-icon,
-  .doc-icon {
-    width: 150px;
-    height: 120px;
-  }
-
-
-
-
-  .footer-row {
-    flex-direction: column;
-    gap: 18px;
+  
+  /* 링크나 버튼 위에서도 기본 손가락 모양 숨김 */
+  a, button, .project-trigger, .view-option, .theme-toggle {
+    cursor: none; 
   }
 }
 
-/* ---------------------- */
-/* keyframes               */
-/* ---------------------- */
-
-@keyframes colon-blink {
-  0% {
-    opacity: 1;
-  }
-  45% {
-    opacity: 1;
-  }
-  60% {
-    opacity: 0;
-  }
-  80% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+/* 2. 커스텀 커서 디자인 (동그라미) */
+.custom-cursor {
+  position: fixed;
+  top: 0; left: 0;
+  width: 20px; height: 20px;
+  background-color: #ffffff; /* 기본은 흰색 (difference로 반전됨) */
+  border-radius: 50%;
+  pointer-events: none; /* 중요: 클릭 통과 */
+  z-index: 99999; /* 무조건 최상단 */
+  transform: translate(-50%, -50%); /* 중앙 정렬 */
+  mix-blend-mode: difference; /* ✨ 배경색에 따라 색상 자동 반전 ✨ */
+  transition: transform 0.15s ease-out, width 0.3s ease, height 0.3s ease;
+  
+  /* 모바일에서는 숨김 */
+  display: none;
 }
 
-/* 폴더 둥실둥실 효과 (아이콘 뷰 전용) */
-@keyframes float {
-  0% {
-    transform: translateY(-8px);
-  }
-  50% {
-    transform: translateY(-14px);
-  }
-  100% {
-    transform: translateY(-8px);
-  }
-}
-/* ===== 리스트 뷰에서 폴더 비율 다시 맞추기 ===== */
-
-/* 폴더 전체 크기 + 모서리 정도 */
-.icon-grid.is-list-view .folder-icon {
-  width: 56px;
-  height: 44px;
-  border-radius: 12px;           /* 살짝만 둥글게 */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.18);
+@media (min-width: 1024px) {
+  .custom-cursor { display: block; }
 }
 
-/* 위에 튀어나온 뚜껑 부분 */
-.icon-grid.is-list-view .folder-icon::before {
-  top: -5px;                     /* 너무 많이 올라가지 않게 */
-  height: 11px;                  /* 전체 높이에 맞게 축소 */
-  border-radius: 9px 9px 0 0;    /* 모서리도 조금만 둥글게 */
+/* 3. 버튼 위에 올렸을 때 (커짐 효과) */
+.custom-cursor.is-hovering {
+  transform: translate(-50%, -50%) scale(2.5); /* 2.5배 커짐 */
+  background-color: #ffffff; /* 반전 효과 유지 */
 }
-
-/* 상단 밝은 띠 부분 */
-.icon-grid.is-list-view .folder-icon::after {
-  height: 14px;
-  border-radius: 12px 12px 0 0;
-}
- 
